@@ -7,12 +7,12 @@ DROP ROLE IF EXISTS auth_postgraphql;
 
 CREATE DATABASE auth;
 \c auth
-create extension if not exists "pgcrypto"; 
-create extension if not exists "citext"; 
+CREATE EXTENSION IF NOT EXISTS "pgcrypto"; 
+CREATE EXTENSION IF NOT EXISTS "citext"; 
 CREATE SCHEMA auth_public; 
 CREATE SCHEMA auth_private;
 
-CREATE ROLE auth_postgraphql login password 'password'; 
+CREATE ROLE auth_postgraphql LOGIN PASSWORD 'password'; 
 CREATE ROLE auth_anonymous; 
 GRANT auth_anonymous TO auth_postgraphql; 
 CREATE ROLE auth_authenticated; 
@@ -31,6 +31,22 @@ CREATE TABLE auth_private.user_account (
   password_hash   text not null 
 );
 
+CREATE TYPE auth_public.jwt as ( 
+  role    text, 
+  user_id integer 
+);
+
+ALTER TABLE auth_public.user ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY select_user ON auth_public.user FOR SELECT
+  using(true);
+
+CREATE POLICY update_user ON auth_public.user FOR UPDATE TO auth_authenticated 
+  using (id = current_setting('jwt.claims.user_id')::integer); 
+
+CREATE POLICY delete_user ON auth_public.user FOR DELETE TO auth_authenticated 
+  using (id = current_setting('jwt.claims.user_id')::integer);
+
 CREATE FUNCTION auth_public.register_user( 
   first_name  text, 
   last_name   text, 
@@ -40,21 +56,16 @@ CREATE FUNCTION auth_public.register_user(
 DECLARE 
   new_user auth_public.user; 
 BEGIN 
-  insert into auth_public.user (first_name, last_name) values 
+  INSERT INTO auth_public.user (first_name, last_name) values 
     (first_name, last_name) 
-    returning * into new_user; 
+    returning * INTO new_user; 
     
-  insert into auth_private.user_account (user_id, email, password_hash) values 
+  INSERT INTO auth_private.user_account (user_id, email, password_hash) values 
     (new_user.id, email, crypt(password, gen_salt('bf'))); 
     
   return new_user; 
 END; 
 $$ language plpgsql strict security definer;
-
-CREATE TYPE auth_public.jwt as ( 
-  role    text, 
-  user_id integer 
-);
 
 CREATE FUNCTION auth_public.authenticate ( 
   email text, 
@@ -63,9 +74,9 @@ CREATE FUNCTION auth_public.authenticate (
 DECLARE 
   account auth_private.user_account; 
 BEGIN 
-  select a.* into account 
-  from auth_private.user_account as a 
-  where a.email = $1; 
+  SELECT a.* INTO account 
+  FROM auth_private.user_account as a 
+  WHERE a.email = $1; 
 
   if account.password_hash = crypt(password, account.password_hash) then 
     return ('auth_authenticated', account.user_id)::auth_public.jwt; 
@@ -87,14 +98,3 @@ GRANT UPDATE, DELETE ON TABLE auth_public.user TO auth_authenticated;
 GRANT EXECUTE ON FUNCTION auth_public.authenticate(text, text) TO auth_anonymous, auth_authenticated; 
 GRANT EXECUTE ON FUNCTION auth_public.register_user(text, text, text, text) TO auth_anonymous; 
 GRANT EXECUTE ON FUNCTION auth_public.current_user() TO auth_anonymous, auth_authenticated; 
-
-ALTER TABLE auth_public.user ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY select_user ON auth_public.user FOR SELECT
-  using(true);
-
-CREATE POLICY update_user ON auth_public.user FOR UPDATE TO auth_authenticated 
-  using (id = current_setting('jwt.claims.user_id')::integer); 
-
-CREATE POLICY delete_user ON auth_public.user FOR DELETE TO auth_authenticated 
-  using (id = current_setting('jwt.claims.user_id')::integer);
