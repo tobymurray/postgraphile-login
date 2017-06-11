@@ -1,0 +1,17 @@
+{
+  "name": "postgraphql-login",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/tobymurray/postgraphql-login.git",
+  "author": "<murray.toby+github@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^4.0.0",
+    "express": "^4.15.3",
+    "pg-promise": "^5.9.0",
+    "postgraphql": "^3.2.0"
+  },
+  "scripts": {
+    "start": "node ./app.js"
+  }
+}
