@@ -253,6 +253,9 @@ mutation {
 }
 ```
 
+## Note if you actually use this
+Move or remove the `.env` file and add `.env` to the `.gitignore`, then bring your `.env` back. This will ensure your environment variables (in particular your application server secret) are not added to version control and ultimately shared.
+
 # Why write this up?
 
 I like to build largely disposable web apps in my spare time, and almost every one needs authentication and authorization to be at all usable. Auth is hard and boring and generally not value added, so I plan on using this as something of a seed for weekend projects. 
