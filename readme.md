@@ -22,7 +22,7 @@ A minimal authentication and authorization enabled Express server with PostGraph
 
 # Try it out
 1. Navigate to Graph<i>i</i>QL the port you've configured (3000 by default)
-    - e.g. http://localhost:3001/graphiql
+    - e.g. http://localhost:3000/graphiql
 
 ## Create a user
 2. Register a user via GraphQL mutation
