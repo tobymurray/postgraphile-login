@@ -8,7 +8,8 @@ DROP ROLE IF EXISTS auth_postgraphql;
 CREATE DATABASE auth;
 \c auth
 CREATE EXTENSION IF NOT EXISTS "pgcrypto"; 
-CREATE EXTENSION IF NOT EXISTS "citext"; 
+CREATE EXTENSION IF NOT EXISTS "citext";
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE SCHEMA auth_public; 
 CREATE SCHEMA auth_private;
 
@@ -27,8 +28,10 @@ CREATE TABLE auth_public.user (
 
 CREATE TABLE auth_private.user_account ( 
   user_id         integer primary key references auth_public.user(id) on delete cascade, 
-  email           citext not null unique, 
-  password_hash   text not null 
+  email           citext NOT NULL UNIQUE, 
+  password_hash   TEXT NOT NULL,
+  activated       BOOLEAN NOT NULL DEFAULT FALSE,
+  activation_code UUID DEFAULT uuid_generate_v4()
 );
 
 CREATE TYPE auth_public.jwt as ( 
@@ -91,6 +94,17 @@ CREATE FUNCTION auth_public.current_user() RETURNS auth_public.user AS $$
   FROM auth_public.user 
   WHERE id = current_setting('jwt.claims.user_id')::integer 
 $$ language sql stable;
+
+CREATE FUNCTION auth_private.on_sign_up() RETURNS trigger as $$
+  DECLARE
+  BEGIN
+    PERFORM pg_notify('sign_ups', row_to_json(NEW)::text );
+    RETURN NEW;
+  END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER auth_private_on_sign_up_trigger AFTER INSERT ON auth_private.user_account
+  FOR EACH ROW EXECUTE PROCEDURE auth_private.on_sign_up();
 
 GRANT USAGE ON SCHEMA auth_public TO auth_anonymous, auth_authenticated; 
 GRANT SELECT ON TABLE auth_public.user TO auth_anonymous, auth_authenticated; 
