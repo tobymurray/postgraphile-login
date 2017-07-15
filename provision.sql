@@ -106,9 +106,36 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER auth_private_on_sign_up_trigger AFTER INSERT ON auth_private.user_account
   FOR EACH ROW EXECUTE PROCEDURE auth_private.on_sign_up();
 
+CREATE OR REPLACE FUNCTION auth_public.activate_user (
+  email TEXT, 
+  activation_code TEXT 
+) RETURNS BOOLEAN AS $$
+  DECLARE
+    account auth_private.user_account;
+  BEGIN
+    SELECT 
+      a.* INTO account 
+    FROM 
+      auth_private.user_account as a 
+    WHERE 
+      a.email = $1;
+
+    IF account.activation_code = $2::UUID THEN
+      UPDATE auth_private.user_account
+      SET activated = TRUE
+      WHERE user_id = account.user_id;
+
+      RETURN TRUE;
+    ELSE
+      RETURN FALSE;
+    END IF;
+  END
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
 GRANT USAGE ON SCHEMA auth_public TO auth_anonymous, auth_authenticated; 
 GRANT SELECT ON TABLE auth_public.user TO auth_anonymous, auth_authenticated; 
 GRANT UPDATE, DELETE ON TABLE auth_public.user TO auth_authenticated; 
 GRANT EXECUTE ON FUNCTION auth_public.authenticate(text, text) TO auth_anonymous, auth_authenticated; 
 GRANT EXECUTE ON FUNCTION auth_public.register_user(text, text, text, text) TO auth_anonymous; 
 GRANT EXECUTE ON FUNCTION auth_public.current_user() TO auth_anonymous, auth_authenticated; 
+GRANT EXECUTE ON FUNCTION auth_public.activate_user(text, text) TO auth_anonymous, auth_authenticated; 
