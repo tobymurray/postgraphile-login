@@ -4,6 +4,10 @@ Note: This project is mostly taken from the [PostGraphQL tutorial](https://githu
 
 A minimal authentication and authorization enabled Express server with PostGraphQL middleware creating a GraphQL server from a PostgreSQL schema.
 
+## Email account activation
+
+See the [this branch](https://github.com/tobymurray/postgraphql-login/tree/feature/email-activation) for an integration of email activation. This workflow creates users that are not "activated" until they provide their activation code from their email.
+
 # Get it running
 
 1. Clone this repository
@@ -249,6 +253,79 @@ mutation {
   ],
   "data": {
     "updateUser": null
+  }
+}
+```
+
+# Activate user
+
+Running the server on [this branch](https://github.com/tobymurray/postgraphql-login/tree/feature/email-activation) for the first time will prompt you to integrate with Gmail. Subsequent times, your client key should be cached. Once Gmail integration is set up, create a user with a real email address you control.
+
+```
+mutation {
+  registerUser(input: {
+    firstName: "Firstname"
+    lastName: "Lastname"
+    email: "realemail@gmail.com"
+    password: "doesNotMatter"
+  }) {
+    user {
+      id
+      firstName
+      lastName
+      createdAt
+    }
+  }
+}
+```
+
+There's nothing particularly notable about the response here, so you can ignore it.
+
+## Activate with the wrong code
+
+```
+mutation {
+  activateUser(input: {
+    email: "realemail@gmail.com",
+    activationCode: "00000000-0000-0000-0000-000000000000"
+  }) {
+    boolean
+  }
+}
+```
+
+Observe the response:
+
+```
+{
+  "data": {
+    "activateUser": {
+      "boolean": false
+    }
+  }
+}
+```
+
+## Activate with the right code
+
+```
+mutation {
+  activateUser (input:{
+    email: "realemail@gmail.com",
+    activationCode: "e0df9b6b-ef0f-417c-823a-6e871f5c7d43"
+  }) {
+    boolean
+  }
+}
+```
+And observe the successful activation!
+
+```
+{
+  "data": {
+    "activateUser": {
+      "boolean": true
+    }
   }
 }
 ```
