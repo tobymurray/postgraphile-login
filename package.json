@@ -7,9 +7,9 @@
   "license": "MIT",
   "dependencies": {
     "dotenv": "^4.0.0",
-    "express": "^4.15.3",
-    "pg-promise": "^5.9.0",
-    "postgraphql": "^3.2.0"
+    "express": "^4.15.4",
+    "pg-promise": "^6.5.1",
+    "postgraphql": "^3.5.0"
   },
   "scripts": {
     "start": "node ./app.js",
