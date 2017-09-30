@@ -36,16 +36,20 @@ CREATE TYPE auth_public.jwt as (
   user_id integer 
 );
 
+CREATE FUNCTION auth_public.current_user_id() RETURNS INTEGER AS $$
+  SELECT current_setting('jwt.claims.user_id', true)::integer;
+$$ LANGUAGE SQL STABLE;
+
 ALTER TABLE auth_public.user ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY select_user ON auth_public.user FOR SELECT
   using(true);
 
 CREATE POLICY update_user ON auth_public.user FOR UPDATE TO auth_authenticated 
-  using (id = current_setting('jwt.claims.user_id')::integer); 
+  using (id = auth_public.current_user_id());
 
 CREATE POLICY delete_user ON auth_public.user FOR DELETE TO auth_authenticated 
-  using (id = current_setting('jwt.claims.user_id')::integer);
+  using (id = auth_public.current_user_id());
 
 CREATE FUNCTION auth_public.register_user( 
   first_name  text, 
@@ -89,7 +93,7 @@ $$ language plpgsql strict security definer;
 CREATE FUNCTION auth_public.current_user() RETURNS auth_public.user AS $$ 
   SELECT * 
   FROM auth_public.user 
-  WHERE id = current_setting('jwt.claims.user_id')::integer 
+  WHERE id = auth_public.current_user_id()
 $$ language sql stable;
 
 GRANT USAGE ON SCHEMA auth_public TO auth_anonymous, auth_authenticated; 
