@@ -1,0 +1,22 @@
+sudo: required
+dist: trusty
+language: node_js
+node_js: 
+  - "node"
+cache: yarn
+
+services:
+  - postgresql
+
+addons:
+  postgresql: "9.6"
+
+before_script:
+  - yarn
+
+script:
+  - yarn run provision
+  - yarn run provision
+  - yarn run start &
+  - sleep 5
+  - killall node
