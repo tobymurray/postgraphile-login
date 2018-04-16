@@ -11,7 +11,7 @@ See the [this branch](https://github.com/tobymurray/postgraphql-login/tree/featu
 # Get it running
 
 1. Clone this repository
-    - `git clone https://github.com/tobymurray/postgraphql-login.git`
+    - `git clone https://github.com/tobymurray/postgraphile-login.git`
 1. Install dependencies
     - `yarn` or `npm install`
 1. Ensure you have a PostgreSQL server running somewhere. If you don't, start one.
