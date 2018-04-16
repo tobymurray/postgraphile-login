@@ -1,8 +1,8 @@
-Note: This project is mostly taken from the [PostGraphQL tutorial](https://github.com/postgraphql/postgraphql/blob/master/examples/forum/TUTORIAL.md#authentication-and-authorization).
+Note: This project is mostly taken from the wonderful [PostGraphile tutorial](https://github.com/graphile/postgraphile/blob/master/examples/forum/TUTORIAL.md#authentication-and-authorization).
 
 # What is it?
 
-A minimal authentication and authorization enabled Express server with PostGraphQL middleware creating a GraphQL server from a PostgreSQL schema.
+A minimal authentication and authorization enabled Express server with PostGraphile middleware creating a GraphQL server from a PostgreSQL schema.
 
 ## Email account activation
 
