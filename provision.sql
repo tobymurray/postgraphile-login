@@ -37,7 +37,7 @@ CREATE TYPE auth_public.jwt as (
 );
 
 CREATE FUNCTION auth_public.current_user_id() RETURNS INTEGER AS $$
-  SELECT current_setting('jwt.claims.user_id', true)::integer;
+  SELECT current_setting('jwt.claims.user_id')::integer;
 $$ LANGUAGE SQL STABLE;
 
 ALTER TABLE auth_public.user ENABLE ROW LEVEL SECURITY;
