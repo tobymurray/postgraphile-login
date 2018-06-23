@@ -6,7 +6,7 @@ A minimal authentication and authorization enabled Express server with PostGraph
 
 ## Email account activation
 
-See the [this branch](https://github.com/tobymurray/postgraphql-login/tree/feature/email-activation) for an integration of email activation. This workflow creates users that are not "activated" until they provide their activation code from their email.
+See the [this branch](https://github.com/tobymurray/postgraphile-login/tree/feature/email-activation) for an integration of email activation. This workflow creates users that are not "activated" until they provide their activation code from their email.
 
 # Get it running
 
@@ -259,7 +259,7 @@ mutation {
 
 # Activate user
 
-Running the server on [this branch](https://github.com/tobymurray/postgraphql-login/tree/feature/email-activation) for the first time will prompt you to integrate with Gmail. Subsequent times, your client key should be cached. Once Gmail integration is set up, create a user with a real email address you control.
+Running the server on [this branch](https://github.com/tobymurray/postgraphile-login/tree/feature/email-activation) for the first time will prompt you to integrate with Gmail. Subsequent times, your client key should be cached. Once Gmail integration is set up, create a user with a real email address you control.
 
 ```
 mutation {

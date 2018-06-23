@@ -1,7 +1,7 @@
 DROP DATABASE IF EXISTS auth;
 DROP ROLE IF EXISTS auth_anonymous;
 DROP ROLE IF EXISTS auth_authenticated;
-DROP ROLE IF EXISTS auth_postgraphql;
+DROP ROLE IF EXISTS auth_postgraphile;
 
 --- 
 
@@ -12,11 +12,11 @@ CREATE EXTENSION IF NOT EXISTS "citext";
 CREATE SCHEMA auth_public; 
 CREATE SCHEMA auth_private;
 
-CREATE ROLE auth_postgraphql LOGIN PASSWORD 'password'; 
-CREATE ROLE auth_anonymous; 
-GRANT auth_anonymous TO auth_postgraphql; 
-CREATE ROLE auth_authenticated; 
-GRANT auth_authenticated TO auth_postgraphql;
+CREATE ROLE auth_postgraphile LOGIN PASSWORD 'password';
+CREATE ROLE auth_anonymous;
+GRANT auth_anonymous TO auth_postgraphile;
+CREATE ROLE auth_authenticated;
+GRANT auth_authenticated TO auth_postgraphile;
 
 CREATE TABLE auth_public.user ( 
   id              serial primary key, 

@@ -1,6 +1,6 @@
 require('dotenv').config();
-const express = require('express');
-const postgraphql = require('postgraphql').postgraphql;
+const express = require("express");
+const { postgraphile } = require("postgraphile");
 
 const app = express()
 
@@ -18,7 +18,7 @@ app.use(function(req, res, next) {
   next();
 });
 
-app.use(postgraphql(
+app.use(postgraphile(
   postgresConfig,
   process.env.POSTGRAPHQL_SCHEMA, {
     graphiql: true,
