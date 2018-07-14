@@ -20,12 +20,12 @@ app.use(function(req, res, next) {
 
 app.use(postgraphile(
   postgresConfig,
-  process.env.POSTGRAPHQL_SCHEMA, {
+  process.env.POSTGRAPHILE_SCHEMA, {
     graphiql: true,
     watchPg: true,
-    jwtPgTypeIdentifier: `${process.env.POSTGRAPHQL_SCHEMA}.jwt`,
+    jwtPgTypeIdentifier: `${process.env.POSTGRAPHILE_SCHEMA}.jwt`,
     jwtSecret: process.env.JWT_SECRET,
-    pgDefaultRole: process.env.POSTGRAPHQL_DEFAULT_ROLE
+    pgDefaultRole: process.env.POSTGRAPHILE_DEFAULT_ROLE
   }))
 
 app.use(function (req, res, next) {
