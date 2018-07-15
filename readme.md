@@ -16,6 +16,8 @@ See the [this branch](https://github.com/tobymurray/postgraphile-login/tree/feat
     - `yarn` or `npm install`
 1. Ensure you have a PostgreSQL server running somewhere. If you don't, start one.
     - E.g.: `docker run --restart=always -p 5432:5432 --name postgres -e POSTGRES_PASSWORD=password -d postgres:alpine`
+1. Ensure you have a PostgreSQL client available. If you don't, install one.
+    - E.g.: `sudo apt install postgresql-client`
 1. Fill out the `.env` file with the relevant connection details
     - Note that if you change values, you may have to update `provision.sql`
 1. Load the contents of `provision.sql` into your PostgreSQL server
