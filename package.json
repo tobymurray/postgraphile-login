@@ -6,10 +6,10 @@
   "author": "<murray.toby+github@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "dotenv": "^6.0.0",
-    "express": "^4.16.3",
-    "pg-promise": "^8.4.5",
-    "postgraphile": "^4.0.0-rc.1"
+    "dotenv": "8.2.0",
+    "express": "4.17.1",
+    "pg-promise": "10.2.1",
+    "postgraphile": "4.5.0"
   },
   "scripts": {
     "start": "node ./app.js",
