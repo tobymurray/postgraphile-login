@@ -24,7 +24,7 @@ See the [this branch](https://github.com/tobymurray/postgraphile-login/tree/feat
     - E.g.: `psql -h localhost -U postgres -f provision.sql`
     - NOTE: If you're using docker, you need to specify the host explicilty (PSQL tries the socket by default, which fails)
 1. Start the server
-    - `yarn start`
+    - `npm start`
 
 # Try it out
 1. Navigate to Graph<i>i</i>QL the port you've configured (3000 by default)
