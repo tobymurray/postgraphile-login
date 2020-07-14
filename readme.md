@@ -1,4 +1,4 @@
-Note: This project is mostly taken from the wonderful [PostGraphile tutorial](https://github.com/graphile/postgraphile/blob/master/examples/forum/TUTORIAL.md#authentication-and-authorization).
+Note: This project is mostly taken from the wonderful [PostGraphile tutorial](https://github.com/graphile/postgraphile/blob/v4/examples/forum/TUTORIAL.md#authentication-and-authorization).
 
 # What is it?
 
